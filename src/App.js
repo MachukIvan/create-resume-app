@@ -1,34 +1,34 @@
-import React from 'react';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import CreateResume from './containers/CreateResume/CreateResume';
-import Auth from './containers/Auth/Auth';
+import React from "react";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import CreateResume from "./containers/CreateResume/CreateResume";
+import Auth from "./containers/Auth/Auth";
 
 class App extends React.Component {
   state = {
-    isAuthenticated: false
+    isAuthenticated: true
   };
 
-  componentDidMount = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.setState({
-        isAuthenticated: true
-      });
-    }
-  };
+  // componentDidMount = () => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     this.setState({
+  //       isAuthenticated: true
+  //     });
+  //   }
+  // };
 
-  componentDidUpdate = () => {
-    const token = localStorage.getItem('token');
-    if (token && !this.state.isAuthenticated) {
-      this.setState({
-        isAuthenticated: true
-      });
-    } else if (!token && this.state.isAuthenticated) {
-      this.setState({
-        isAuthenticated: false
-      });
-    }
-  };
+  // componentDidUpdate = () => {
+  //   const token = localStorage.getItem('token');
+  //   if (token && !this.state.isAuthenticated) {
+  //     this.setState({
+  //       isAuthenticated: true
+  //     });
+  //   } else if (!token && this.state.isAuthenticated) {
+  //     this.setState({
+  //       isAuthenticated: false
+  //     });
+  //   }
+  // };
 
   render() {
     let routes = (

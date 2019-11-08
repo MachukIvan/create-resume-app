@@ -1,47 +1,32 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import axios from 'axios';
-import cx from 'classnames';
-import * as jsPDF from 'jspdf';
-import classes from './CreateResume.module.css';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { withRouter } from "react-router-dom";
+import axios from "axios";
+import cx from "classnames";
+import * as jsPDF from "jspdf";
+import classes from "./CreateResume.module.css";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Button from "@material-ui/core/Button";
 
 class CreateResume extends React.Component {
   state = {
     personalData: {
-      jobTitle: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: ''
+      jobTitle: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: ""
     },
     progress: 0
   };
 
-  // componentDidMount() {
-  //   axios
-  //     .get('http://192.168.100.2:3000/api/v1/resumes/5')
-  //     .then(res => {
-  //       console.log(res);
-  //       this.setState({
-  //         ...this.state,
-  //         personalData: {
-  //           jobTitle: res.data.job_title,
-  //           firstName: res.data.first_name,
-  //           lastName: res.data.last_name,
-  //           email: res.data.email,
-  //           phone: res.data.phone
-  //         }
-  //       });
-  //     })
-  //     .catch(err => console.error(err));
-  // }
+  componentDidUpdate = () => {
+    this.setProgress();
+  };
 
   inputHandler = (event, field) => {
     this.setState({
@@ -51,16 +36,6 @@ class CreateResume extends React.Component {
         [field]: event.target.value
       }
     });
-  };
-
-  setProgress = oldProgress => {
-    if (oldProgress === 100) {
-      return 0;
-    } else {
-      this.setState({
-        progress: oldProgress + 20
-      });
-    }
   };
 
   downloadPDF = () => {
@@ -76,12 +51,12 @@ class CreateResume extends React.Component {
       10,
       10
     );
-    doc.save('Resume.pdf');
+    doc.save("Resume.pdf");
   };
 
   postData = () => {
     axios
-      .post('http://192.168.100.2:3000/api/v1/resumes', {
+      .post("http://192.168.100.2:3000/api/v1/resumes", {
         job_title: this.state.personalData.jobTitle,
         first_name: this.state.personalData.firstName,
         last_name: this.state.personalData.lastName,
@@ -95,11 +70,26 @@ class CreateResume extends React.Component {
   };
 
   signOut = () => {
-    localStorage.removeItem('token');
-    this.props.history.push('/');
+    localStorage.removeItem("token");
+    this.props.history.push("/");
+  };
+
+  setProgress = () => {
+    let progress = 0;
+    Object.entries(this.state.personalData).forEach(([key, value]) => {
+      if (value.length !== 0 && progress < 100) {
+        progress = progress + 100 / Object.keys(this.state.personalData).length;
+      }
+    });
+    if (progress !== this.state.progress) {
+      this.setState({
+        progress: progress
+      });
+    }
   };
 
   render() {
+    console.log(this.state.progress);
     return (
       <Grid
         container
@@ -108,16 +98,34 @@ class CreateResume extends React.Component {
         alignItems="stretch"
         className={classes.container}
       >
-        <LinearProgress variant="determinate" value={this.state.progress} />
         <Grid
           xs={6}
           item
           className={cx(classes.section, classes.controlsSection)}
         >
-          <Typography variant="h6" component="h6">
+          <Box component="div" className={classes.progressLine}>
+            <span
+              className={cx(classes.progressScore, {
+                [classes.secondaryColor]: this.state.progress === 100
+              })}
+            >
+              {`${this.state.progress}%`}
+            </span>
+            <span className={classes.progressTitle}>Resume Completeness</span>
+            <LinearProgress
+              variant="determinate"
+              value={this.state.progress}
+              color={this.state.progress === 100 ? "secondary" : "primary"}
+            />
+          </Box>
+          <Typography
+            variant="h6"
+            component="h6"
+            className={classes.groupHeading}
+          >
             Personal Details
           </Typography>
-          <Box className={classes.formBlock}>
+          <Box component="div" className={classes.formBlock}>
             <TextField
               id="jobTitle"
               required
@@ -125,7 +133,7 @@ class CreateResume extends React.Component {
               label="Job title"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'jobTitle')}
+              onChange={e => this.inputHandler(e, "jobTitle")}
               value={this.state.personalData.jobTitle}
             />
             <TextField
@@ -135,7 +143,7 @@ class CreateResume extends React.Component {
               label="First Name"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'firstName')}
+              onChange={e => this.inputHandler(e, "firstName")}
               value={this.state.personalData.firstName}
             />
             <TextField
@@ -145,7 +153,7 @@ class CreateResume extends React.Component {
               label="Last Name"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'lastName')}
+              onChange={e => this.inputHandler(e, "lastName")}
               value={this.state.personalData.lastName}
             />
             <TextField
@@ -155,7 +163,7 @@ class CreateResume extends React.Component {
               label="Email"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'email')}
+              onChange={e => this.inputHandler(e, "email")}
               value={this.state.personalData.email}
             />
             <TextField
@@ -164,11 +172,16 @@ class CreateResume extends React.Component {
               label="Phone"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'phone')}
+              onChange={e => this.inputHandler(e, "phone")}
               value={this.state.personalData.phone}
             />
           </Box>
-          <Button onClick={this.postData} variant="contained">
+          <Button
+            onClick={this.postData}
+            variant="contained"
+            className={classes.postBtn}
+            disabled={this.state.progress !== 100}
+          >
             Post data
           </Button>
           <Button
