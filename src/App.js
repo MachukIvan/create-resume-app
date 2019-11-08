@@ -1,11 +1,48 @@
 import React from 'react';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import CreateResume from './containers/CreateResume/CreateResume';
+import Auth from './containers/Auth/Auth';
 
-function App() {
-  return (
-    <div className="App">
-      ZALUPA
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    isAuthenticated: false
+  };
+
+  componentDidMount = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.setState({
+        isAuthenticated: true
+      });
+    }
+  };
+
+  componentDidUpdate = () => {
+    const token = localStorage.getItem('token');
+    if (token && !this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: true
+      });
+    }
+  };
+
+  render() {
+    let routes = (
+      <Switch>
+        <Route path="/" exact render={props => <Auth {...props} />} />
+        <Redirect to="/" />
+      </Switch>
+    );
+    if (this.state.isAuthenticated) {
+      routes = (
+        <Switch>
+          <Route path="/create" render={props => <CreateResume {...props} />} />
+          <Redirect to="/create" />
+        </Switch>
+      );
+    }
+    return routes;
+  }
 }
 
-export default App;
+export default withRouter(App);
