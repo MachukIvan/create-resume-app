@@ -1,17 +1,17 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import axios from 'axios';
-import classes from './Auth.module.css';
+import React from "react";
+import { withRouter } from "react-router-dom";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import classes from "./Auth.module.css";
 
 class Auth extends React.Component {
   state = {
-    email: '',
-    password: '',
-    userName: '',
-    passwordConfirmation: '',
+    email: "",
+    password: "",
+    userName: "",
+    passwordConfirmation: "",
     loginSuccess: false,
     signUp: false,
     loadError: false
@@ -25,10 +25,10 @@ class Auth extends React.Component {
 
   signIn = () => {
     axios
-      .post('http://192.168.100.2:3000/authenticate', this.state)
+      .post("http://192.168.100.2:3000/authenticate", this.state)
       .then(res => {
-        localStorage.setItem('token', res.data.auth_token);
-        this.props.history.push('/create');
+        localStorage.setItem("token", res.data.auth_token);
+        this.props.history.push("/create");
         console.log(res);
       })
       .catch(err => {
@@ -45,15 +45,14 @@ class Auth extends React.Component {
 
   createAccount = () => {
     axios
-      .post('http://192.168.100.2:3000/user/create', {
+      .post("http://192.168.100.2:3000/user/create", {
         ...this.state,
         username: this.state.userName,
         password_confirmation: this.state.passwordConfirmation
       })
       .then(res => {
-        localStorage.setItem('token', 'zdarova');
-        this.props.history.push('/create');
-        console.log(res);
+        localStorage.setItem("token", "zdarova");
+        this.props.history.push("/create");
       })
       .catch(err => {
         this.setState({ loadError: true });
@@ -76,7 +75,7 @@ class Auth extends React.Component {
           label="Password Confirmation"
           margin="normal"
           variant="outlined"
-          onChange={e => this.inputHandler(e, 'passwordConfirmation')}
+          onChange={e => this.inputHandler(e, "passwordConfirmation")}
         />
         <TextField
           id="username"
@@ -84,7 +83,7 @@ class Auth extends React.Component {
           label="User Name"
           margin="normal"
           variant="outlined"
-          onChange={e => this.inputHandler(e, 'userName')}
+          onChange={e => this.inputHandler(e, "userName")}
         />
         <Button
           onClick={this.createAccount}
@@ -106,7 +105,7 @@ class Auth extends React.Component {
               label="Email"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'email')}
+              onChange={e => this.inputHandler(e, "email")}
             />
             <TextField
               id="password"
@@ -115,7 +114,7 @@ class Auth extends React.Component {
               label="Password"
               margin="normal"
               variant="outlined"
-              onChange={e => this.inputHandler(e, 'password')}
+              onChange={e => this.inputHandler(e, "password")}
             />
             {!this.state.signUp && (
               <>
