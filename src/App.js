@@ -23,6 +23,10 @@ class App extends React.Component {
       this.setState({
         isAuthenticated: true
       });
+    } else if (!token && this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: false
+      });
     }
   };
 

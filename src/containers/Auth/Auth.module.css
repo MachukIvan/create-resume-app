@@ -12,3 +12,11 @@
   width: 30rem;
   height: 30rem;
 }
+
+.signBtn {
+  margin-top: 1rem !important;
+}
+
+.errorMessage {
+  color: red;
+}

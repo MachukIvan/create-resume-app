@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import cx from 'classnames';
 import * as jsPDF from 'jspdf';
@@ -93,6 +94,11 @@ class CreateResume extends React.Component {
       .catch(err => console.error(err));
   };
 
+  signOut = () => {
+    localStorage.removeItem('token');
+    this.props.history.push('/');
+  };
+
   render() {
     return (
       <Grid
@@ -165,6 +171,14 @@ class CreateResume extends React.Component {
           <Button onClick={this.postData} variant="contained">
             Post data
           </Button>
+          <Button
+            onClick={this.signOut}
+            color="secondary"
+            variant="contained"
+            className={classes.signOutBtn}
+          >
+            Sign Out
+          </Button>
         </Grid>
         <Grid
           xs={6}
@@ -202,4 +216,4 @@ class CreateResume extends React.Component {
   }
 }
 
-export default CreateResume;
+export default withRouter(CreateResume);

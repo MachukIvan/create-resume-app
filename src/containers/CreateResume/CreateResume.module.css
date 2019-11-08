@@ -38,3 +38,9 @@
   width: 15rem;
   align-self: flex-end;
 }
+
+.signOutBtn {
+  position: absolute !important;
+  left: 2rem;
+  bottom: 2rem;
+}

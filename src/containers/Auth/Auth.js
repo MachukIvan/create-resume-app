@@ -10,7 +10,11 @@ class Auth extends React.Component {
   state = {
     email: '',
     password: '',
-    loginSuccess: false
+    userName: '',
+    passwordConfirmation: '',
+    loginSuccess: false,
+    signUp: false,
+    loadError: false
   };
 
   inputHandler = (event, field) => {
@@ -19,7 +23,7 @@ class Auth extends React.Component {
     });
   };
 
-  login = () => {
+  signIn = () => {
     axios
       .post('http://192.168.100.2:3000/authenticate', this.state)
       .then(res => {
@@ -27,10 +31,71 @@ class Auth extends React.Component {
         this.props.history.push('/create');
         console.log(res);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        this.setState({ loadError: true });
+        console.error(err);
+      });
+  };
+
+  signUp = () => {
+    this.setState({
+      signUp: true
+    });
+  };
+
+  createAccount = () => {
+    axios
+      .post('http://192.168.100.2:3000/user/create', {
+        ...this.state,
+        username: this.state.userName,
+        password_confirmation: this.state.passwordConfirmation
+      })
+      .then(res => {
+        localStorage.setItem('token', 'zdarova');
+        this.props.history.push('/create');
+        console.log(res);
+      })
+      .catch(err => {
+        this.setState({ loadError: true });
+        console.error(err);
+      });
   };
 
   render() {
+    const errorMessage = this.state.loadError ? (
+      <Box className={classes.errorMessage} component="div">
+        This is an error message!
+      </Box>
+    ) : null;
+    const signUpFields = this.state.signUp ? (
+      <>
+        <TextField
+          id="passwordConfirmation"
+          type="password"
+          required
+          label="Password Confirmation"
+          margin="normal"
+          variant="outlined"
+          onChange={e => this.inputHandler(e, 'passwordConfirmation')}
+        />
+        <TextField
+          id="username"
+          required
+          label="User Name"
+          margin="normal"
+          variant="outlined"
+          onChange={e => this.inputHandler(e, 'userName')}
+        />
+        <Button
+          onClick={this.createAccount}
+          variant="contained"
+          color="secondary"
+          className={classes.signBtn}
+        >
+          Create Account
+        </Button>
+      </>
+    ) : null;
     return (
       <>
         <Box component="div" className={classes.container}>
@@ -52,9 +117,28 @@ class Auth extends React.Component {
               variant="outlined"
               onChange={e => this.inputHandler(e, 'password')}
             />
-            <Button onClick={this.login} variant="contained" color="primary">
-              Log In
-            </Button>
+            {!this.state.signUp && (
+              <>
+                <Button
+                  onClick={this.signIn}
+                  variant="contained"
+                  color="primary"
+                  className={classes.signBtn}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  onClick={this.signUp}
+                  variant="contained"
+                  color="secondary"
+                  className={classes.signBtn}
+                >
+                  Sign Up
+                </Button>
+              </>
+            )}
+            {signUpFields}
+            {errorMessage}
           </Box>
         </Box>
       </>
