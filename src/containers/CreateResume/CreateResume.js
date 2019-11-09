@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 
 class CreateResume extends React.Component {
   state = {
+    title: "",
     personalData: {
       jobTitle: "",
       firstName: "",
@@ -103,15 +104,26 @@ class CreateResume extends React.Component {
           item
           className={cx(classes.section, classes.controlsSection)}
         >
+          <TextField
+            id="title"
+            className={classes.title}
+            margin="normal"
+            variant="standard"
+            defaultValue="Untitled"
+            InputProps={{ className: classes.titleInput }}
+          />
           <Box component="div" className={classes.progressLine}>
-            <span
+            <Typography
+              component="span"
               className={cx(classes.progressScore, {
                 [classes.secondaryColor]: this.state.progress === 100
               })}
             >
               {`${this.state.progress}%`}
-            </span>
-            <span className={classes.progressTitle}>Resume Completeness</span>
+            </Typography>
+            <Typography component="span" className={classes.progressTitle}>
+              Resume Completeness
+            </Typography>
             <LinearProgress
               variant="determinate"
               value={this.state.progress}
@@ -168,6 +180,7 @@ class CreateResume extends React.Component {
             />
             <TextField
               id="phone"
+              required
               className={classes.textField}
               label="Phone"
               margin="normal"
