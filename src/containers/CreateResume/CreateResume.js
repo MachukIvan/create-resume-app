@@ -1,8 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import html2pdf from "html2pdf.js";
 import axios from "axios";
 import cx from "classnames";
-import * as jsPDF from "jspdf";
 import classes from "./CreateResume.module.css";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -40,19 +40,10 @@ class CreateResume extends React.Component {
   };
 
   downloadPDF = () => {
-    const doc = new jsPDF();
-    doc.text(
-      `
-      Job Title: ${this.state.personalData.jobTitle}
-      First Name: ${this.state.personalData.firstName}
-      Last Name: ${this.state.personalData.lastName}
-      Email: ${this.state.personalData.email}
-      Phone: ${this.state.personalData.phone}
-      `,
-      10,
-      10
-    );
-    doc.save("Resume.pdf");
+    const element = document.getElementById("personal-data");
+    html2pdf()
+      .from(element)
+      .save("Resume.pdf");
   };
 
   postData = () => {
@@ -103,6 +94,7 @@ class CreateResume extends React.Component {
           xs={6}
           item
           className={cx(classes.section, classes.controlsSection)}
+          id="personal-data"
         >
           <TextField
             id="title"
