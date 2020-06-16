@@ -5,9 +5,9 @@ import Auth from "./containers/Auth/Auth";
 
 class App extends React.Component {
   state = {
-    isAuthenticated: true
+    isAuthenticated: true,
   };
-
+  // Disable authentication
   // componentDidMount = () => {
   //   const token = localStorage.getItem('token');
   //   if (token) {
@@ -33,14 +33,17 @@ class App extends React.Component {
   render() {
     let routes = (
       <Switch>
-        <Route path="/" exact render={props => <Auth {...props} />} />
+        <Route path="/" exact render={(props) => <Auth {...props} />} />
         <Redirect to="/" />
       </Switch>
     );
     if (this.state.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path="/create" render={props => <CreateResume {...props} />} />
+          <Route
+            path="/create"
+            render={(props) => <CreateResume {...props} />}
+          />
           <Redirect to="/create" />
         </Switch>
       );
