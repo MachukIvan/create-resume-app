@@ -17,18 +17,18 @@ class App extends React.Component {
     }
   };
 
-  // componentDidUpdate = () => {
-  //   const token = localStorage.getItem('token');
-  //   if (token && !this.state.isAuthenticated) {
-  //     this.setState({
-  //       isAuthenticated: true
-  //     });
-  //   } else if (!token && this.state.isAuthenticated) {
-  //     this.setState({
-  //       isAuthenticated: false
-  //     });
-  //   }
-  // };
+  componentDidUpdate = () => {
+    const token = localStorage.getItem("token");
+    if (token && !this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: true,
+      });
+    } else if (!token && this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: false,
+      });
+    }
+  };
 
   render() {
     let routes = (
