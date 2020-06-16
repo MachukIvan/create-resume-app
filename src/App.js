@@ -7,28 +7,28 @@ class App extends React.Component {
   state = {
     isAuthenticated: true,
   };
-  // Disable authentication
-  // componentDidMount = () => {
-  //   const token = localStorage.getItem('token');
-  //   if (token) {
-  //     this.setState({
-  //       isAuthenticated: true
-  //     });
-  //   }
-  // };
 
-  // componentDidUpdate = () => {
-  //   const token = localStorage.getItem('token');
-  //   if (token && !this.state.isAuthenticated) {
-  //     this.setState({
-  //       isAuthenticated: true
-  //     });
-  //   } else if (!token && this.state.isAuthenticated) {
-  //     this.setState({
-  //       isAuthenticated: false
-  //     });
-  //   }
-  // };
+  componentDidMount = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.setState({
+        isAuthenticated: true,
+      });
+    }
+  };
+
+  componentDidUpdate = () => {
+    const token = localStorage.getItem("token");
+    if (token && !this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: true,
+      });
+    } else if (!token && this.state.isAuthenticated) {
+      this.setState({
+        isAuthenticated: false,
+      });
+    }
+  };
 
   render() {
     let routes = (
