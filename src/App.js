@@ -7,7 +7,7 @@ class App extends React.Component {
   state = {
     isAuthenticated: true,
   };
-
+  //Comment
   componentDidMount = () => {
     const token = localStorage.getItem("token");
     if (token) {
